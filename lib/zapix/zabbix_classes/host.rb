@@ -22,7 +22,7 @@ class Host
   end
 
   def add_encryption_options(opts)
-    @properties.merge!(encryption_opts)
+    @properties.merge!(opts)
   end
 
   def add_interfaces(*ifaces)
