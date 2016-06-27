@@ -10,7 +10,7 @@ This version of zappix is compatible with zabbix 3.0
 
 Add this line to your application's Gemfile:
 
-    gem 'zapix', '0.1.0'
+    gem 'zapix3', '0.1.1'
 
 And then execute:
 
