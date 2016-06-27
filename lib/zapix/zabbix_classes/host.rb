@@ -21,6 +21,10 @@ class Host
     @properties.merge!('groups' => group_ids)
   end
 
+  def add_encryption_options(opts)
+    @properties.merge!(encryption_opts)
+  end
+
   def add_interfaces(*ifaces)
     interfaces.concat(ifaces)
     @properties.merge!('interfaces' => interfaces)
