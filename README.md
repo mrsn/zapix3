@@ -26,6 +26,12 @@ Or install it with gem:
 First create a remote client. Feel free to
 disable the debug mode if you find it annoying.
 
+These environment variables also need to be set:
+
+    ZABBIX_API_URL
+    ZABBIX_API_LOGIN
+    ZABBIX_API_PASSWORD
+
 ```ruby
 require 'zapix'
 zrc = ZabbixAPI.connect(
@@ -336,12 +342,6 @@ zrc.users.create(user_options)
 
 ### Remote client and tests
 In order to run the rspec tests you need a running zabbix test server.
-
-These environment variables also need to be set:
-
-    ZABBIX_API_URL
-    ZABBIX_API_LOGIN
-    ZABBIX_API_PASSWORD
 
 ### TODOs
 Open source the docker-compose setup of the whole zabbix installation.
