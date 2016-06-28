@@ -44,11 +44,6 @@ zrc = ZabbixAPI.connect(
 zrc.hostgroups.create('test_hostgroup')
 ```
 
-#### Checking if a hostgroup exists
-```ruby
-zrc.hostgroups.exists?('test_hostgroup')
-```
-
 #### Checking if a hostgroup has any attached hosts
 ```ruby
 zrc.hostgroups.any_hosts?('test_hostgroup')
@@ -81,11 +76,6 @@ zrc.hostgroups.get_all
 #### Getting the id of a host
 ```ruby
 zrc.hosts.get_id('test_host')
-```
-
-#### Checking if a host exists
-```ruby
-zrc.hosts.exists?('test_host')
 ```
 
 #### Getting all host names
@@ -246,12 +236,6 @@ zrc.triggers.delete(trigger_id)
 
 ### Usergroups Operations
 
-#### Checking if a usergroup exists
-```ruby
-  zrc.usergroups.exists?({
-  'name' => 'test_usergroup'
-})
-```
 #### Geting the id of a usergroup
 ```ruby
 zrc.usergroups.get_id({
@@ -274,12 +258,6 @@ zrc.usergroups.create(options)
 ```ruby
 usergroup_id = zrc.usergroups.get_id({'name' => 'test_usergroup'})
 zrc.usergroups.delete(usergroup_id)
-```
-
-### User Operations
-#### Checking if a user exists
-```ruby
-zrc.users.exists?({'alias' => 'max'})
 ```
 
 #### Getting the id of a user
@@ -310,11 +288,6 @@ zrc.users.create(user_options)
 ```
 
 ### Actions Operations
-
-#### Checking if an action exists
-```ruby
-  zrc.actions.exists?({'name' => 'Report problems to Zabbix administrators'})
-```
 
 #### Getting the id of an action
 ```ruby
