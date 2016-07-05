@@ -19,7 +19,7 @@ class Applications < Base
     if exists?(options)
       client.application_get({
         'filter' => {'name' => options['name'],
-        'hostid' => options['hostid']}}).first['applicationids']
+        'hostid' => options['hostid']}}).first['applicationid']
     else
       raise NonExistingApplication, "Application #{options['name']} does not exist !"
     end
