@@ -46,6 +46,10 @@ class ZabbixAPI
     @actions ||= Actions.new(client)
   end
 
+  def proxies
+    @proxies ||= Proxies.new(client)
+  end
+
   def usergroups
     @usergroups ||= Usergroups.new(client)
   end
