@@ -4,7 +4,7 @@ class Proxies < Base
 
   def get_id(proxy_name)
     result = client.proxy_get({
-      'filter' => {'name' => [proxy_name]}
+      'filter' => {'host' => proxy_name}
     })
 
     result.first['proxyid']
