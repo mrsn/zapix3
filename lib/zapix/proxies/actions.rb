@@ -17,7 +17,8 @@ class Actions < Base
   def get_id(options)
     result = client.action_get({
       'filter' => {'name' => options['name']}})
-      result.first['actionid']
+    
+    result.first['actionid']
   end
 
   def delete(*action_ids)
