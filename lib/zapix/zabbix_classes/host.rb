@@ -14,6 +14,10 @@ class Host
     @properties.merge!('host' => name)
   end
 
+  def add_visible_name(visible_name)
+    @properties.merge!('name' => visible_name)
+  end
+
   def add_group_ids(*ids)
     ids.each do |id|
       group_ids << {'groupid' => id}
