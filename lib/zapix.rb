@@ -58,4 +58,16 @@ class ZabbixAPI
     @users ||= Users.new(client)
   end
 
+  def screens
+    @screens ||= Screens.new(client)
+  end
+
+  def screenitems
+    @screenitems ||= ScreenItems.new(client)
+  end
+
+  def graphs
+    @graphs ||= Graphs.new(client)
+  end
+  
 end
