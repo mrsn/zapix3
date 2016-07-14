@@ -9,6 +9,10 @@ class Hosts < Base
     end
   end
 
+  def get_hosts_for_hostgroup(group_id)
+    client.host_get({'groupids' => [group_id]})
+  end
+
   def create(options={})
     client.host_create(options) unless exists?(options["host"])
   end
