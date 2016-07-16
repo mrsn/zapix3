@@ -69,5 +69,4 @@ class ZabbixAPI
   def graphs
     @graphs ||= Graphs.new(client)
   end
-  
 end

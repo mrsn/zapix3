@@ -10,9 +10,9 @@ class Interface
   #  https://www.zabbix.com/documentation/2.0/manual/appendix/api/hostinterface/definitions#host_interface
   # we assume ip and dns shall always be set
 
-  validates_inclusion_of :type, :in => 1..4
-  validates_inclusion_of :main, :in => 0..1
-  validates_inclusion_of :useip, :in => 0..1
+  validates_inclusion_of :type, in: 1..4
+  validates_inclusion_of :main, in: 0..1
+  validates_inclusion_of :useip, in: 0..1
 
   def initialize(attributes)
     @type = attributes['type'] ||= 1
@@ -20,7 +20,7 @@ class Interface
     @useip = attributes['useip'] ||= 1
     @ip = attributes['ip'] = attributes['ip']
     @dns = attributes['dns'] = attributes['dns']
-    @port = attributes['port'] = attributes['port'] ||= 10050
+    @port = attributes['port'] = attributes['port'] ||= 10_050
     @result = {
       'type' => type,
       'main' => main,
@@ -38,5 +38,4 @@ class Interface
   def to_hash
     @result
   end
-
 end

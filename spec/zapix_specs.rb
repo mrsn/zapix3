@@ -1,11 +1,11 @@
 require_relative 'spec_helper'
 
 zrc = ZabbixAPI.connect(
-  :service_url => ENV['ZABBIX_API_URL'],
-  :username => ENV['ZABBIX_API_LOGIN'],
-  :password => ENV['ZABBIX_API_PASSWORD'],
-  :debug => true
-  )
+  service_url: ENV['ZABBIX_API_URL'],
+  username: ENV['ZABBIX_API_LOGIN'],
+  password: ENV['ZABBIX_API_PASSWORD'],
+  debug: true
+)
 
 hostgroup = 'hostgroup123'
 another_hostgroup = 'anotherhostgroup'
@@ -17,8 +17,8 @@ application = 'web scenarios'
 host = 'hostname'
 scenario = 'scenario'
 trigger_description = 'Webpage failed on {HOST.NAME}'
-#trigger_expression = "{#{host}:web.test.fail[#{scenario}].max(#3)}#0"
-trigger_expression = "{#{host}:system.cpu.load[percpu,avg1].last()}>5"                
+# trigger_expression = "{#{host}:web.test.fail[#{scenario}].max(#3)}#0"
+trigger_expression = "{#{host}:system.cpu.load[percpu,avg1].last()}>5"
 non_existing_trigger_expression = '{vfs.file.cksum[/etc/passwd].diff(0)}>0'
 existing_action_name = 'Report problems to Zabbix administrators'
 non_existing_action_name = 'No action defined'
@@ -31,7 +31,6 @@ test_user = 'Jim'
 test_action = 'Test Action'
 
 describe ZabbixAPI do
-
   context 'hostgroup' do
     before(:all) do
       zrc.hostgroups.create(hostgroup)
@@ -61,7 +60,7 @@ describe ZabbixAPI do
 
     it 'returns hostgroup id' do
       result = zrc.hostgroups.get_id(hostgroup)
-      (result.to_i).should >= 0
+      result.to_i.should >= 0
     end
 
     it 'throws exception if hostgroup id does not exist' do
@@ -69,7 +68,7 @@ describe ZabbixAPI do
     end
 
     it 'throws exception if someone checks for attached hosts of nonexisting group' do
-     expect { zrc.hostgroups.any_hosts?('nonexisting') }.to raise_error(HostGroups::NonExistingHostgroup)
+      expect { zrc.hostgroups.any_hosts?('nonexisting') }.to raise_error(HostGroups::NonExistingHostgroup)
     end
 
     it 'returns false if a hostgroup has no attached hosts' do
@@ -77,9 +76,8 @@ describe ZabbixAPI do
     end
 
     it 'returns all hostgroups' do
-      (zrc.hostgroups.get_all).should include(hostgroup, another_hostgroup)
+      zrc.hostgroups.get_all.should include(hostgroup, another_hostgroup)
     end
-
   end
   context 'complex hostgroup consisting hosts' do
     before(:each) do
@@ -90,16 +88,15 @@ describe ZabbixAPI do
       example_host.add_interfaces(create_interface.to_hash)
       example_host.add_group_ids(hostgroup_id)
       example_host.add_template_ids(zrc.templates.get_id(template_1), zrc.templates.get_id(template_2))
-      example_host.add_macros({'macro' => '{$TESTMACRO}', 'value' => 'test123'})
+      example_host.add_macros('macro' => '{$TESTMACRO}', 'value' => 'test123')
       zrc.hosts.create_or_update(example_host.to_hash)
     end
 
-     it 'deletes a hostgroup with attached hosts' do
+    it 'deletes a hostgroup with attached hosts' do
       zrc.hosts.exists?(host).should be true
       zrc.hostgroups.delete(hostgroup_with_hosts)
       zrc.hostgroups.exists?(hostgroup_with_hosts).should be false
     end
-   
   end
 
   context 'complex hostgroup' do
@@ -109,7 +106,7 @@ describe ZabbixAPI do
       example_host = Host.new
       example_host.add_name(host)
       example_host.add_interfaces(create_interface.to_hash)
-      example_host.add_macros({'macro' => '{$TESTMACRO}', 'value' => 'test123'})
+      example_host.add_macros('macro' => '{$TESTMACRO}', 'value' => 'test123')
       example_host.add_group_ids(hostgroup_id)
       example_host.add_template_ids(zrc.templates.get_id(template_1), zrc.templates.get_id(template_2))
       zrc.hosts.create_or_update(example_host.to_hash)
@@ -125,7 +122,7 @@ describe ZabbixAPI do
       webcheck_options['hostid'] = zrc.hosts.get_id(host)
       webcheck_options['name'] = scenario
       webcheck_options['applicationid'] = zrc.applications.get_id(application_options)
-      webcheck_options['steps'] = [{'name' => 'Homepage', 'url' => 'm.test.de', 'status_codes' => 200, 'no' => 1}]
+      webcheck_options['steps'] = [{ 'name' => 'Homepage', 'url' => 'm.test.de', 'status_codes' => 200, 'no' => 1 }]
       zrc.scenarios.create(webcheck_options)
 
       # creates a trigger
@@ -141,7 +138,6 @@ describe ZabbixAPI do
     end
 
     describe 'hosts' do
-
       it 'returns true if a hostgroup has attached hosts' do
         zrc.hostgroups.any_hosts?(hostgroup_with_hosts).should be true
       end
@@ -202,13 +198,13 @@ describe ZabbixAPI do
         host_id = zrc.hosts.get_id(host)
         options = {}
         options['host_id'] = host_id
-        options['macros'] = [{'macro' => '{$TESTMACRO}', 'value' => 'this is only a test macro'}]
+        options['macros'] = [{ 'macro' => '{$TESTMACRO}', 'value' => 'this is only a test macro' }]
         zrc.hosts.update_macros(options)
       end
 
       it 'creates a template' do
         template_name = 'Template Tomcat'
-        options = {'host' => template_name}
+        options = { 'host' => template_name }
         options['groups'] = zrc.hostgroups.get_id(templates_hostgroup)
         zrc.templates.create(options)
         zrc.templates.exists?(template_name).should be true
@@ -235,12 +231,12 @@ describe ZabbixAPI do
         options['name'] = application
         options['hostid'] = zrc.hosts.get_id(host)
         result = zrc.applications.get_id(options)
-        (result.to_i).should >= 0
+        result.to_i.should >= 0
       end
 
       it 'throws exception on non existing application' do
         options = {}
-        options['name'] = "nonexisting"
+        options['name'] = 'nonexisting'
         options['hostid'] = zrc.hosts.get_id(host)
         expect { zrc.applications.get_id(options) }.to raise_error(Applications::NonExistingApplication)
       end
@@ -256,7 +252,7 @@ describe ZabbixAPI do
 
       it 'returns all web scenarios' do
         options = {}
-        (zrc.scenarios.get_all).should include(scenario)
+        zrc.scenarios.get_all.should include(scenario)
       end
 
       it 'gets the id of a web scenario' do
@@ -265,12 +261,12 @@ describe ZabbixAPI do
         options['hostid'] = zrc.hosts.get_id(host)
         zrc.scenarios.exists?(options).should be true
         result = zrc.scenarios.get_id(options)
-        (result['result'].to_i).should >= 0
+        result['result'].to_i.should >= 0
       end
 
       it 'returns false if a web scenario does not exist' do
         options = {}
-        options['name'] = "nonexisting"
+        options['name'] = 'nonexisting'
         options['hostid'] = zrc.hosts.get_id(host)
         zrc.scenarios.exists?(options).should be false
       end
@@ -320,7 +316,7 @@ describe ZabbixAPI do
       it 'check if interface exists for host' do
         options = {}
         options['hostid'] = zrc.hosts.get_id(host)
-        options['port'] = 10050
+        options['port'] = 10_050
         options['type'] = 1
         zrc.hostinterfaces.exists?(options).should be true
 
@@ -355,12 +351,12 @@ describe ZabbixAPI do
           'operator'      => 0, # =
           'value' => zrc.hostgroups.get_id('Templates')
         },
-        # not in maintenance
-        {
-          'conditiontype' => 16, # Maintenance
-          'operator'      => 7,  # not in
-          'value'         => 'maintenance'
-        }]
+                                 # not in maintenance
+                                 {
+                                   'conditiontype' => 16, # Maintenance
+                                   'operator'      => 7,  # not in
+                                   'value'         => 'maintenance'
+                                 }]
         options['operations'] = [{
           'operationtype' => 0,
           'esc_period'     => 0,
@@ -397,7 +393,7 @@ describe ZabbixAPI do
         options = {}
         options['name'] = test_action
         result = zrc.actions.get_id(options)
-        (result.to_i).should >= 0
+        result.to_i.should >= 0
       end
     end
 
@@ -431,7 +427,7 @@ describe ZabbixAPI do
         options = {}
         options['name'] = test_usergroup
         result = zrc.usergroups.get_id(options)
-        (result.to_i).should >= 0
+        result.to_i.should >= 0
         options['name'] = non_existing_usergroup
         expect { zrc.usergroups.get_id(options) }.to raise_error(Usergroups::NonExistingUsergroup)
       end
@@ -478,18 +474,18 @@ describe ZabbixAPI do
         options = {}
         options['alias'] = test_user
         result = zrc.users.get_id(options)
-        (result.to_i).should >= 0
+        result.to_i.should >= 0
         options['alias'] = non_existing_user
         expect { zrc.users.get_id(options) }.to raise_error(Users::NonExistingUser)
       end
-
     end
   end
 
   def create_interface
     Interface.new(
       'ip'  => random_local_ip,
-      'dns' => random_domain)
+      'dns' => random_domain
+    )
   end
 
   def create_jmx_interface
@@ -498,7 +494,8 @@ describe ZabbixAPI do
       'dns' => random_domain,
       'type' => 4, # JMX
       'main' => 1, # default jmx interface
-      'port' => 9003)
+      'port' => 9003
+    )
   end
 
   def random_string
@@ -516,5 +513,4 @@ describe ZabbixAPI do
   def random_domain
     "#{random_string}.our-cloud.de"
   end
-
 end

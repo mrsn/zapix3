@@ -1,7 +1,6 @@
 require_relative 'base'
 
 class HostGroups < Base
-
   def mass_create(*names)
     names.each do |group_name|
       create(group_name)
@@ -9,21 +8,21 @@ class HostGroups < Base
   end
 
   def create(name)
-    client.hostgroup_create({'name' => name}) unless exists?(name)
+    client.hostgroup_create('name' => name) unless exists?(name)
   end
 
   def create_or_update(name)
-    if(exists?(name))
+    if exists?(name)
       id = get_id(name)
-      client.hostgroup_update({'groupid' => id,'name' => name})
+      client.hostgroup_update('groupid' => id, 'name' => name)
     else
       create(name)
     end
   end
 
   def exists?(name)
-    result = client.hostgroup_get({'filter' => {'name' => [name]}})
-    if (result == nil || result.empty?)
+    result = client.hostgroup_get('filter' => { 'name' => [name] })
+    if result.nil? || result.empty?
       return false
     else
       return true
@@ -31,8 +30,8 @@ class HostGroups < Base
   end
 
   def get_id(name)
-    if(exists?(name))
-      result = client.hostgroup_get({'filter' => {'name' => [name]}})
+    if exists?(name)
+      result = client.hostgroup_get('filter' => { 'name' => [name] })
       result[0]['groupid']
     else
       raise NonExistingHostgroup, "Hostgroup #{name} does not exist !"
@@ -46,22 +45,22 @@ class HostGroups < Base
   end
 
   def get_host_ids_of(hostgroup)
-    result = client.hostgroup_get('filter' => {'name' => [hostgroup]}, 'selectHosts' => 'refer')
+    result = client.hostgroup_get('filter' => { 'name' => [hostgroup] }, 'selectHosts' => 'refer')
     extract_host_ids(result)
   end
 
   def any_hosts?(hostgroup)
     raise NonExistingHostgroup, "Hostgroup #{hostgroup} does not exist !" unless exists?(hostgroup)
-    result = client.hostgroup_get('filter' => {'name' => [hostgroup]}, 'selectHosts' => 'count').first['hosts'].to_i
-    #result = client.hostgroup_get('countOutput' => 'true', 'filter' => {'name' => [hostgroup]}, 'selectHosts' => 'count').to_i
+    result = client.hostgroup_get('filter' => { 'name' => [hostgroup] }, 'selectHosts' => 'count').first['hosts'].to_i
+    # result = client.hostgroup_get('countOutput' => 'true', 'filter' => {'name' => [hostgroup]}, 'selectHosts' => 'count').to_i
     result >= 1 ? true : false
   end
 
   def delete(name)
-    if(exists?(name))
-      # host cannot exist without a hostgroup, so we need to delete 
+    if exists?(name)
+      # host cannot exist without a hostgroup, so we need to delete
       # the attached hosts also
-      if(any_hosts?(name))
+      if any_hosts?(name)
         # delete all hosts attached to a hostgroup
         host_ids = get_host_ids_of(name)
         host_ids.each do |id|
@@ -80,7 +79,7 @@ class HostGroups < Base
   def get_all
     # the fucking API also returns the ids and that's
     # why we need to extract the names
-    host_groups_with_ids = client.hostgroup_get({'output' => ['name']})
+    host_groups_with_ids = client.hostgroup_get('output' => ['name'])
     extract_host_groups(host_groups_with_ids)
   end
 

@@ -1,15 +1,14 @@
 require_relative 'base'
 
 class Usergroups < Base
-
   def create(options)
     client.usergroup_create(options) unless exists?(options)
   end
 
   def exists?(options)
-    #client.usergroup_exists(options)
-    result = client.usergroup_get({'filter' => {'name' => options['name']}})
-    if result.empty? || result == nil
+    # client.usergroup_exists(options)
+    result = client.usergroup_get('filter' => { 'name' => options['name'] })
+    if result.empty? || result.nil?
       false
     else
       true
@@ -17,9 +16,8 @@ class Usergroups < Base
   end
 
   def get_id(options)
-    if(exists?(options))
-      result = client.usergroup_get({
-        'filter' => {'name' => options['name']}})
+    if exists?(options)
+      result = client.usergroup_get('filter' => { 'name' => options['name'] })
       result.first['usrgrpid']
     else
       raise NonExistingUsergroup, "Usergroup #{options['name']} does not exist !"
@@ -31,5 +29,4 @@ class Usergroups < Base
   end
 
   class NonExistingUsergroup < StandardError; end
-
 end

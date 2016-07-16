@@ -1,6 +1,5 @@
 require_relative 'base'
 class Triggers < Base
-
   def create(options)
     client.trigger_create(options)
   end
@@ -10,13 +9,13 @@ class Triggers < Base
   end
 
   def get_id(options)
-    result = client.trigger_get({'output' => 'extend',
-      'expandExpression' => true})
+    result = client.trigger_get('output' => 'extend',
+                                'expandExpression' => true)
     id = extract_id(result, options['expression'])
-    unless id.nil?
-      id
-    else
+    if id.nil?
       raise NonExistingTrigger, "Trigger with expression #{options['expression']} not found."
+    else
+      id
     end
   end
 
@@ -34,7 +33,4 @@ class Triggers < Base
     end
     result
   end
-
 end
-
-

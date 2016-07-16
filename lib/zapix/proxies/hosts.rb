@@ -1,50 +1,49 @@
 require_relative 'base'
 class Hosts < Base
-
   def get_id(name)
-    if(exists?(name))
-      client.host_get({'filter' => {'host' => name}}).first['hostid']
+    if exists?(name)
+      client.host_get('filter' => { 'host' => name }).first['hostid']
     else
       raise NonExistingHost, "Host #{name} does not exist !"
     end
   end
 
   def get_hosts_for_hostgroup(group_id)
-    client.host_get({'groupids' => [group_id]})
+    client.host_get('groupids' => [group_id])
   end
 
-  def create(options={})
-    client.host_create(options) unless exists?(options["host"])
+  def create(options = {})
+    client.host_create(options) unless exists?(options['host'])
   end
 
-  def create_or_update(options={})
+  def create_or_update(options = {})
     raise EmptyHostname, 'Host name cannot be empty !' if options['host'].nil?
     if exists?(options['host'])
       id = get_id(options['host'])
-      options.merge!('hostid' => id)
+      options['hostid'] = id
       client.host_update(options)
     else
       create(options)
     end
   end
 
-  def unlink_and_clear_templates(options={})
-    template_ids = options['template_ids'].map { |id| {'templateid' => id}}
-    client.host_update({'hostid' => options['host_id'], 'templates_clear' => template_ids})
+  def unlink_and_clear_templates(options = {})
+    template_ids = options['template_ids'].map { |id| { 'templateid' => id } }
+    client.host_update('hostid' => options['host_id'], 'templates_clear' => template_ids)
   end
 
-  def update_templates(options={})
-    template_ids = options['template_ids'].map { |id| {'templateid' => id}}
-    client.host_update({'hostid' => options['host_id'], 'templates' => template_ids})
+  def update_templates(options = {})
+    template_ids = options['template_ids'].map { |id| { 'templateid' => id } }
+    client.host_update('hostid' => options['host_id'], 'templates' => template_ids)
   end
 
-  def update_macros(options={})
+  def update_macros(options = {})
     client.host_update('hostid' => options['host_id'], 'macros' => options['macros'])
   end
 
   def exists?(name)
-    result = client.host_get({'filter' => {'host' => name}})
-    if (result == nil || result.empty?)
+    result = client.host_get('filter' => { 'host' => name })
+    if result.nil? || result.empty?
       false
     else
       true
@@ -52,7 +51,7 @@ class Hosts < Base
   end
 
   def get_all
-    host_names_and_ids = client.host_get({'output' => ['name']})
+    host_names_and_ids = client.host_get('output' => ['name'])
 
     # the fucking api ALWAYS returns the ids and that's
     # why we need to extract the names separately

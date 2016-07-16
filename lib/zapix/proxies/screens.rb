@@ -2,9 +2,7 @@ require_relative 'base'
 
 class Screens < Base
   def get_id(options)
-    result = client.screen_get({
-      'filter' => {'name' => options['name']}
-    })
+    result = client.screen_get('filter' => { 'name' => options['name'] })
 
     result.first['screenid']
   end
@@ -18,8 +16,8 @@ class Screens < Base
   end
 
   def exists?(options)
-    result = client.screen_get({'filter' => {'name' => options['name']}})
-    if (result == nil || result.empty?)
+    result = client.screen_get('filter' => { 'name' => options['name'] })
+    if result.nil? || result.empty?
       false
     else
       true

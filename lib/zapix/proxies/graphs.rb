@@ -7,10 +7,10 @@ class Graphs < Base
 
     graphs.each do |g|
       graphs_with_names_and_ids <<
-      { 
-        'name' => g['name'],
-        'id' => g['graphid']
-      }
+        {
+          'name' => g['name'],
+          'id' => g['graphid']
+        }
     end
 
     graphs_with_names_and_ids

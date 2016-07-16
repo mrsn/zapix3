@@ -6,13 +6,13 @@ class Users < Base
   end
 
   def exists?(options)
-    result = client.user_get({'filter' => {'alias' => options['alias']}})
+    result = client.user_get('filter' => { 'alias' => options['alias'] })
     result.empty? ? false : true
   end
 
   def get_id(options)
-    if(exists?(options))
-      client.user_get({'filter' => {'alias' => options['alias']}}).first['userid']
+    if exists?(options)
+      client.user_get('filter' => { 'alias' => options['alias'] }).first['userid']
     else
       raise NonExistingUser, "User #{options['alias']} does not exist !"
     end
@@ -24,5 +24,3 @@ class Users < Base
 
   class NonExistingUser < StandardError; end
 end
-
-

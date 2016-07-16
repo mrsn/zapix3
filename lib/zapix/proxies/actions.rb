@@ -2,8 +2,8 @@ require_relative 'base'
 
 class Actions < Base
   def exists?(options)
-    result = client.action_get({'filter' => {'name' => options['name']}})
-    if (result == nil || result.empty?)
+    result = client.action_get('filter' => { 'name' => options['name'] })
+    if result.nil? || result.empty?
       return false
     else
       return true
@@ -15,9 +15,8 @@ class Actions < Base
   end
 
   def get_id(options)
-    result = client.action_get({
-      'filter' => {'name' => options['name']}})
-    
+    result = client.action_get('filter' => { 'name' => options['name'] })
+
     result.first['actionid']
   end
 

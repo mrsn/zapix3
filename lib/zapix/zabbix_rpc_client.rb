@@ -1,9 +1,8 @@
 require 'net/http'
 require 'uri'
 require 'json'
- 
-class ZabbixRPCClient
 
+class ZabbixRPCClient
   attr_reader :uri, :debug
 
   def initialize(options)
@@ -13,7 +12,7 @@ class ZabbixRPCClient
     @debug = options[:debug]
     @auth_token = authenticate
   end
- 
+
   def method_missing(name, *args)
     method_name = map_name(name)
 
@@ -22,17 +21,17 @@ class ZabbixRPCClient
       'params' => args.first,
       'id' => id,
       'jsonrpc' => '2.0',
-      'auth' => @auth_token 
+      'auth' => @auth_token
     }.to_json
 
-    resp = JSON.parse( http_post_request(post_body) )
+    resp = JSON.parse(http_post_request(post_body))
     raise JSONRPCError, resp['error'] if resp['error']
     puts "[DEBUG] Get answer: #{resp}" if debug
-    resp["result"]
+    resp['result']
   end
- 
+
   def http_post_request(post_body)
-    http    = Net::HTTP.new(uri.host, uri.port)
+    http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = 'application/json'
@@ -42,16 +41,16 @@ class ZabbixRPCClient
   end
 
   def authenticate
-    p user_login({'user' => @username, 'password' => @password})
-    user_login({'user' => @username, 'password' => @password})
+    p user_login('user' => @username, 'password' => @password)
+    user_login('user' => @username, 'password' => @password)
   end
 
   def id
-    rand(100000)
+    rand(100_000)
   end
 
   def map_name(name)
-   name.to_s.sub('_', '.')
+    name.to_s.sub('_', '.')
   end
 
   class JSONRPCError < RuntimeError; end
