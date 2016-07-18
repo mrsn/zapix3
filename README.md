@@ -26,17 +26,13 @@ Or install it with gem:
 First create a remote client. Feel free to
 disable the debug mode if you find it annoying.
 
-These environment variables also need to be set:
-	ZABBIX_SERVER_URL
-        ZABBIX_USERNAME
-        ZABBIX_PASSWORD
 ```ruby
 require 'zapix'
 zrc = ZabbixAPI.connect(
-  :service_url => 'https://zabbix-server.foo/api_jsonrpc.php',
-  :username => 'guybrush',
-  :password => 'threepwood',
-  :debug => true
+  service_url: ENV['ZABBIX_SERVER_URL'],
+  username: ENV['ZABBIX_USERNAME'],
+  password: ENV['ZABBIX_PASSWORD'],
+  debug: true
 )
 ```
 
