@@ -27,11 +27,9 @@ First create a remote client. Feel free to
 disable the debug mode if you find it annoying.
 
 These environment variables also need to be set:
-
-    ZABBIX_API_URL
-    ZABBIX_API_LOGIN
-    ZABBIX_API_PASSWORD
-
+	ZABBIX_SERVER_URL
+        ZABBIX_USERNAME
+        ZABBIX_PASSWORD
 ```ruby
 require 'zapix'
 zrc = ZabbixAPI.connect(
