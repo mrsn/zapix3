@@ -1,7 +1,7 @@
 require_relative 'base'
 class Triggers < Base
   def create(options)
-    client.trigger_create(options)
+    client.trigger_create(options) unless exists?(options)
   end
 
   def delete(*trigger_ids)
