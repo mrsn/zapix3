@@ -8,6 +8,20 @@ class Triggers < Base
     client.trigger_delete(trigger_ids)
   end
 
+  # this is very unefficient
+  # but there is no other way to verify that a trigger exists..
+  def exists?(options)
+    result = client.trigger_get('output' => 'extend',
+                                'expandExpression' => true)
+
+    id = extract_id(result, options['expression'])
+    if id.nil?
+      false
+    else
+      true
+    end
+  end
+
   def get_id(options)
     result = client.trigger_get('output' => 'extend',
                                 'expandExpression' => true)
