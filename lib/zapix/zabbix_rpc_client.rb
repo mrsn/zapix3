@@ -41,7 +41,7 @@ class ZabbixRPCClient
   end
 
   def authenticate
-    p user_login('user' => @username, 'password' => @password)
+    user_login('user' => @username, 'password' => @password)
     user_login('user' => @username, 'password' => @password)
   end
 
