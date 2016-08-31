@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zapix3 (0.2.4)
+    zapix3 (0.2.5)
 
 GEM
   remote: https://rubygems.org/
