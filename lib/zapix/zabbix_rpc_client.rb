@@ -37,7 +37,13 @@ class ZabbixRPCClient
     request.content_type = 'application/json'
     request.body = post_body
     puts "[DEBUG] Send request: #{request.body}" if debug
-    http.request(request).body
+
+    begin
+      return http.request(request).body
+    rescue
+      puts "[DEBUG] Retrying sending request: #{request.body}" if debug
+      retry
+    end
   end
 
   def authenticate
