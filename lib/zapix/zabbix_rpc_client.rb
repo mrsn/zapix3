@@ -9,6 +9,7 @@ class ZabbixRPCClient
     @uri = URI.parse(options[:service_url])
     @username = options[:username]
     @password = options[:password]
+    @use_ssl = options.fetch(:use_ssl, true)
     @debug = options[:debug]
     @auth_token = authenticate
   end
@@ -32,7 +33,7 @@ class ZabbixRPCClient
 
   def http_post_request(post_body)
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
+    http.use_ssl = @use_ssl
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = 'application/json'
     request.body = post_body
